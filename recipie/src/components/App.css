@@ -1,0 +1,19 @@
+body{
+  font-family: 'Open Sans', sans-serif !important;}
+
+  .text-slanted {
+    font-family: "Courgette",cursive;
+  }
+
+  /* .text-orange{
+    color: #f115025;
+  } */
+
+  .letter-spacing{
+    letter-spacing: 0.5rem;
+  }
+
+  .header-hero{
+    min-height: 100vh;
+    background: url() center/cover no-repeat ;
+  }
