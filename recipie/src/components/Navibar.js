@@ -1,83 +1,58 @@
-import React , {Component , useState } from 'react';
-import {Link} from 'react-router-dom';
-import {
-    Collapse,
-    Navbar,
-    NavbarToggler,
-    NavbarBrand,
-    Nav,
-    NavItem,
-    NavLink,
-    UncontrolledDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
-    NavbarText
-  } from 'reactstrap';
-  
+import React, { useState, useEffect } from 'react';
+import { AppBar, Typography, Toolbar, Avatar, Button } from '@material-ui/core';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import decode from 'jwt-decode';
 
+import * as actionType from '../constants/actionTypes';
+import useStyles from './styles';
 
+const Navbar = () => {
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const history = useHistory();
+  const classes = useStyles();
 
-class Navibar extends Component
-{
-    constructor(props)
-    {
-        super(props);
-        // this.toggle = this.toggle.bind(this);
+  const logout = () => {
+    dispatch({ type: actionType.LOGOUT });
 
+    history.push('/auth');
+
+    setUser(null);
+  };
+
+  useEffect(() => {
+    const token = user?.token;
+
+    if (token) {
+      const decodedToken = decode(token);
+
+      if (decodedToken.exp * 1000 < new Date().getTime()) logout();
     }
-    // state = {
-    //     isOpen : false
-    // } 
-    // toggle(){
-    //     this.setState ({
-    //         isOpen : true
-    //     });
-    // };
-    render(){
-        return(
-            // <nav className="navbar navbar-expand-lg navbar-light bg-light ">
-            //     <Link to = '/' className = "navbar-brand">
-            //         {/* <img src = '' alt = '' /> */}
-            //         <div>thenumanchega</div>
-            //     </Link>
-            //     <div className = "collapse navbar-collapse show ml-sm-5">
-            //         <ul className = "navbar-nav">
-            //             <li className = "nav-item">
-            //                 <Link className = "nav-Link" to = "/">
-            //                     Home
-            //                 </Link>
-            //             </li>
-            //             <li className = "nav-item">
-            //                 <Link className = "nav-Link" to = "/recipies">
-            //                     Recipies
-            //                 </Link>
-            //             </li>
-            //         </ul>
 
-            //     </div>
+    setUser(JSON.parse(localStorage.getItem('profile')));
+  }, [location]);
 
-            // </nav>
-            <Navbar color = "light" light expand = "md">
-                <NavbarBrand href="/">Recipipe</NavbarBrand>
-                <NavbarToggler  />
-                <Collapse  navbar>
-                    <Nav className = "mr-auto" navbar>
-                    <NavItem>
-                        <NavLink href="/">Home</NavLink>
-                    </NavItem>
-                    <NavItem>
-                        <NavLink href="/recipies">Recipies</NavLink>
-                    </NavItem>
-                    <NavItem>
-                        <NavLink href="">Logout</NavLink>
-                    </NavItem>
-                    </Nav>
-                </Collapse>
-
-            </Navbar>
-        );
-    };
+  return (
+    <AppBar className={classes.appBar} position="static" color="inherit">
+      <div className={classes.brandContainer}>
+        <Typography component={Link} to="/" className={classes.heading} variant="h2" align="center">Recipies</Typography>
+        {/* <img className={classes.image} src="" alt="icon" height="60" /> */}
+      </div>
+      <Toolbar className={classes.toolbar}>
+        {user?.result ? (
+          <div className={classes.profile}>
+            <Avatar className={classes.purple} alt={user?.result.name} src={user?.result.imageUrl}>{user?.result.name.charAt(0)}</Avatar>
+            <Typography className={classes.userName} variant="h6">{user?.result.name}</Typography>
+            <Button variant="contained" className={classes.logout} color="secondary" onClick={logout}>Logout</Button>
+          </div>
+        ) : (
+          <Button component={Link} to="/auth" variant="contained" color="primary">Sign In</Button>
+        )}
+      </Toolbar>
+    </AppBar>
+  );
 };
 
-export default Navibar;
+export default Navbar;

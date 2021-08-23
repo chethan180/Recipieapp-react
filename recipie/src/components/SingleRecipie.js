@@ -1,6 +1,8 @@
 import React , {Component} from 'react';
 // import {recipieDataDetail} from './DetailExport';
-import {Link} from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
+import Heading from './Heading';
+
 
 class SingleRecipie extends Component
 {
@@ -10,10 +12,12 @@ class SingleRecipie extends Component
         const id = this.props.match.params.id;
         this.state = {
             recipie : {},
+            user: JSON.parse(localStorage.getItem('profile')),
             id,
             loading :true
         } 
     }
+
 
     async componentDidMount(){
         const url = `https://api.spoonacular.com/recipes/${this.state.id}/information?apiKey=872f4af49f574c51ae0af5fe64887764&includeNutrition=false` ;
@@ -42,9 +46,28 @@ class SingleRecipie extends Component
             sourceUrl,
             extendedIngredients,
             instructions,
-            // readyInMinutes,
-            // spoonacularScore,    
+            readyInMinutes,
+            spoonacularScore,  
+            vegan,
+            vegetarian,
+            veryHealthy,
+            glutenFree,
+            healthScore
         } = this.state.recipie;
+
+        console.log(instructions);
+        // var hello = new String(instructions);
+        // // console.log(hello.charAt(0));
+        // let hello1;
+        // if(hello.charAt(0) === '<')
+        // {
+        //     hello1 = hello.split('<li>')
+        // }
+
+        // console.log(hello1);
+
+        const token = this.state.user?.result;
+        if(token){
 
         if(this.state.loading ){
         return(
@@ -68,13 +91,44 @@ class SingleRecipie extends Component
                         </Link>
                         <h2 className = "text-uppercase">{title}</h2>
                         <img src = {image} className= "d-block w-100" style = {{maxHeight : "30rem"}} alt = "" />
+                        <div>
+                            <h3>Recipie Score </h3>
+                            {spoonacularScore}
+                        </div>
+                        <div>
+                            <h3>Ready in minutes</h3>
+                            {readyInMinutes}
+                        </div>
+                        <div>
+                            <h3>healthScore</h3>
+                            {healthScore}
+                        </div>
+                        
+                        <div>
+                            <h3>vegan</h3>
+                            {vegan}
+                        </div>
+                        <div>
+                            <h3> vegetarian</h3>
+                            {vegetarian}
+                        </div>
+                        <div>
+                            <h3>veryHealthy</h3>
+                            {veryHealthy}
+                        </div>
+                        <div>
+                            <h3>glutenFree</h3>
+                            {glutenFree}
+                        </div>
+
                     </div>
                     <div className = "col-10 mx-auto col-md-6 my-3">
                         {/* <h6 className = "text-warning text-capitalize text-slanted" */}
-                        <a href = {sourceUrl} target = "_blank" rel = "noopener noreferrer" className = "btn btn-primary mt-2 text-capitalize">
+                        <a href = {sourceUrl} target = "_blank" rel = "noopener noreferrer" className = "btn btn-primary mt-2 text-capitalize offset-2">
                             source url
                         </a>
-                        <p>
+                        <p className = "offset-2">
+                            <h3>Ingridients</h3>
                         {extendedIngredients.map(item => {
                             return (
                                 <div>
@@ -85,6 +139,7 @@ class SingleRecipie extends Component
                         );})}
                         </p>
                         <p>
+                            <h3>Steps for instructions</h3>
                             {instructions}
                         </p>
 
@@ -92,8 +147,16 @@ class SingleRecipie extends Component
                 </div>
             </div>
         )
-
-
+        }
+        else{
+            return (
+            <Heading title = "Log in to view more recipies">
+                <Link to = "/auth" className = "text-uppercase btn btn-secondary btn-lg mt-3">
+                   Sign in
+                </Link>
+            </Heading>
+            )
+        }
     };
 };
 
