@@ -3,6 +3,7 @@ import React , {Component} from 'react';
 import { Link } from 'react-router-dom';
 import Heading from './Heading';
 
+const {REACT_APP_APIKEY} = process.env;
 
 class SingleRecipie extends Component
 {
@@ -20,7 +21,7 @@ class SingleRecipie extends Component
 
 
     async componentDidMount(){
-        const url = `https://api.spoonacular.com/recipes/${this.state.id}/information?apiKey=872f4af49f574c51ae0af5fe64887764&includeNutrition=false` ;
+        const url = `https://api.spoonacular.com/recipes/${this.state.id}/information?apiKey=${REACT_APP_APIKEY}&includeNutrition=false` ;
         try {
             const response = await fetch(url);
             const responseData = await response.json();

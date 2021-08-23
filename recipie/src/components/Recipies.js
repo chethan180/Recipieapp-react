@@ -3,6 +3,8 @@ import RecipieList from './RecipieList';
 import Search from './Search';
 // import {recipieData} from './Export'
 
+const {REACT_APP_APIKEY} = process.env;
+
 class Recipies extends Component
 {
     constructor(props){
@@ -13,8 +15,8 @@ class Recipies extends Component
         recipies:[],
         loading :true,
         search:'',
-        url : `https://api.spoonacular.com/recipes/complexSearch?apiKey=872f4af49f574c51ae0af5fe64887764&query=`,
-        base_url : `https://api.spoonacular.com/recipes/complexSearch?apiKey=872f4af49f574c51ae0af5fe64887764&query=`,
+        url : `https://api.spoonacular.com/recipes/complexSearch?apiKey=${REACT_APP_APIKEY}&query=`,
+        base_url : `https://api.spoonacular.com/recipes/complexSearch?apiKey=${REACT_APP_APIKEY}&query=`,
     };
 
     async getRecipies(){
