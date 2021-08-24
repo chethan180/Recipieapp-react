@@ -5,7 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon index.js"
+    "server": "node index.js",
+    "recipie": "npm start --prefix recipie",
+    "dev": "concurrently \"npm run server\" \"npm run recipie\""
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +21,8 @@
     "mongoose": "^5.9.29"
   },
   "devDependencies": {
+    "concurrently": "^6.2.1",
     "nodemon": "^2.0.6"
   }
+
 }

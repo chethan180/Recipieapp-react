@@ -1,4 +1,4 @@
-recipie/.env
+server/recipie/.env
 server/.env
-recipie/node_modules
+server/recipie/node_modules
 server/node_modules
